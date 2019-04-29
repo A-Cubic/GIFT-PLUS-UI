@@ -15,7 +15,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2017 壹立方（大连）信息技术有限公司出品
+    Copyright <Icon type="copyright" /> 2019 壹立方（大连）信息技术有限公司出品
   </Fragment>
 );
 
