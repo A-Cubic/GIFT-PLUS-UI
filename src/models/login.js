@@ -4,6 +4,8 @@ import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
+import { message } from 'antd';
+
 
 export default {
   namespace: 'login',
@@ -13,14 +15,34 @@ export default {
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
+    *login({ payload ,callback}, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
+      // if (response.status === 'ok') {
+      //   reloadAuthorized();
+      //   const urlParams = new URL(window.location.href);
+      //   const params = getPageQuery();
+      //   let { redirect } = params;
+      //   if (redirect) {
+      //     const redirectUrlParams = new URL(redirect);
+      //     if (redirectUrlParams.origin === urlParams.origin) {
+      //       redirect = redirect.substr(urlParams.origin.length);
+      //       if (redirect.match(/^\/.*#/)) {
+      //         redirect = redirect.substr(redirect.indexOf('#') + 1);
+      //       }
+      //     } else {
+      //       redirect = null;
+      //     }
+      //   }
+      //   callback(response)
+      //   yield put(routerRedux.replace(redirect || '/'));
+      // }
+      
+      if (response.data.isonload === true) {
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -34,10 +56,16 @@ export default {
             }
           } else {
             redirect = null;
+      
           }
         }
+        callback(response)
         yield put(routerRedux.replace(redirect || '/'));
+      } else {
+        message.error(response.data.msg);
       }
+
+
     },
 
     *getCaptcha({ payload }, { call }) {
@@ -45,6 +73,7 @@ export default {
     },
 
     *logout(_, { put }) {
+
       yield put({
         type: 'changeLoginStatus',
         payload: {

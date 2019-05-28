@@ -2,23 +2,7 @@ import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
 import moment from 'moment';
 import { connect } from 'dva';
-import {
-  List,
-  Card,
-  Row,
-  Col,
-  Radio,
-  Input,
-  Progress,
-  Button,
-  Icon,
-  Dropdown,
-  Menu,
-  Avatar,
-  Modal,
-  Form,
-  DatePicker,
-  Select,
+import {List,Card,Row,Col,Radio,Input,Progress,Button,Icon,Dropdown,Menu,Avatar,Modal,Form,DatePicker,Select,
 } from 'antd';
 
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -32,8 +16,8 @@ const RadioGroup = Radio.Group;
 const SelectOption = Select.Option;
 const { Search, TextArea } = Input;
 
-@connect(({ list, loading }) => ({
-  list,
+@connect(({ list, loading ,StockModel}) => ({
+  list,StockModel,
   loading: loading.models.list,
 }))
 @Form.create()
@@ -51,6 +35,19 @@ class Stock extends PureComponent {
       type: 'list/fetch',
       payload: {
         count: 5,
+      },
+    });
+    this.init()
+  }
+
+  init(){
+    console.log('111getItem',localStorage.getItem("uesr-token"))
+    console.log('222getItem',localStorage)
+
+    this.props.dispatch({
+      type: 'StockModel/getData',
+      payload: {
+       go:'777'
       },
     });
   }
@@ -111,7 +108,21 @@ class Stock extends PureComponent {
     });
   };
 
+  //点击遇到点
+  handleSizeChange(e){
+    this.props.dispatch({
+      type: 'StockModel/getData',
+      payload: {
+       go:e.target.value
+      },
+    });
+
+
+  }
+
+
   render() {
+    const {StockModel:data} = this.props;
     const {
       list: { list },
       loading,
@@ -148,21 +159,21 @@ class Stock extends PureComponent {
 
     const extraContent = (
       <div className={styles.extraContent}>
-        <RadioGroup defaultValue="all">
-          <RadioButton value="asn">预到店</RadioButton>
-          <RadioButton value="stock">已到店</RadioButton>
+        <RadioGroup defaultValue="预到店" onChange={(e) => {this.handleSizeChange(e)}}>
+          <RadioButton value="预到店">预到店</RadioButton>
+          <RadioButton value="已到店">已到店</RadioButton>
         </RadioGroup>
       </div>
     );
 
-    const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      pageSize: 5,
-      total: 50,
-    };
+    // const paginationProps = {
+    //   showSizeChanger: true,
+    //   showQuickJumper: true,
+    //   pageSize: 5,
+    //   total: 50,
+    // };
 
-    const ListContent = ({ data: { owner, createdAt, percent, status } }) => (
+    const ListContent = ({ data: { owner, createdAt, percent, status, like ,href, activeUser,message} }) => (
       <div className={styles.listContent}>
         <div className={styles.listContentItem}>
           <span>状态</span>
@@ -170,7 +181,8 @@ class Stock extends PureComponent {
         </div>
         <div className={styles.listContentItem}>
           <span>数量</span>
-          <p>{Math.ceil(Math.random() * 50) + 50}</p>
+          {/* <p>{Math.ceil(Math.random() * 50) + 50}</p> */}
+          <p>{message}</p>
         </div>
         <div className={styles.listContentItem}>
           <span>到店时间</span>
@@ -185,6 +197,7 @@ class Stock extends PureComponent {
     return (
       <PageHeaderWrapper>
         <div className={styles.standardList}>
+          {/* <div>77777</div> */}
           <Card bordered={false}>
             <Row>
               <Col sm={8} xs={24}>
@@ -211,13 +224,50 @@ class Stock extends PureComponent {
               size="large"
               rowKey="id"
               loading={loading}
-              pagination={paginationProps}
+              //pagination={paginationProps}
+              pagination={{
+                onChange: (page) => {
+      
+                  this.props.dispatch({
+                    type: 'StockModel/getData',
+                    payload: {
+                      pageSize:page
+                    },
+                  });
+                },
+                onShowSizeChange: (current, pageSize) => {
+                  // const {match,dispatch}=this.props;
+                  // const {brandModel:{brandsGoods:{advimg,brandName,brandimg,goods,pagination}} } = this.props;
+                  // this.props.dispatch({
+                  //   type: 'brandModel/getBrandsGoods',
+                  //   payload: {
+                  //     brandsName:match.params.brandsName,
+      
+                  //     pageSize:pageSize
+                  //   },
+                  // });
+
+                  this.props.dispatch({
+                    type: 'StockModel/getData',
+                    payload: {
+                      pageSize:pageSize
+                    },
+                  });
+
+      
+                },
+                //pageSize: pagination.pageSize,
+                pageSize:5,
+                total: 50,
+                showSizeChanger: true,
+                showQuickJumper: true,
+              }}
               dataSource={list}
               renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
-                    avatar={<Avatar src={item.logo} shape="square" size="large" />}
-                    title={item.title}
+                   // avatar={<Avatar src={item.logo} shape="square" size="large" />}
+                   // title={item.title}
                     description={item.subDescription}
                   />
                   <ListContent data={item} />

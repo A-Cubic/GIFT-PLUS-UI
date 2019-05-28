@@ -1,6 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-
+const b = 'http://192.168.0.128:53943';
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
@@ -103,10 +103,20 @@ export async function updateFakeList(params) {
   });
 }
 
-export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
+export async function fakeAccountLogin(param) {
+  // return request('/api/login/account', {
+  //   method: 'POST',
+  //   data: params,
+  // });
+  return request(b+'/api/config/GiftManage/user', {
+    // method: 'POST',
+    // data: params,
     method: 'POST',
-    data: params,
+    data: {
+      param,
+     // method: 'post',
+     method : "UserLogin", 
+    },
   });
 }
 

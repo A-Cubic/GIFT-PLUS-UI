@@ -49,9 +49,21 @@ class LoginPage extends Component {
           ...values,
           type,
         },
+        callback: this.callbackType,
       });
+      
     }
   };
+
+  callbackType = (param) => {
+    if(param.data.isonload == true){
+      localStorage.setItem('acbc-token',JSON.stringify(param.data))
+      localStorage.setItem('acbc-authority', param.data.power)
+    }
+    
+  } 
+
+
 
   changeAutoLogin = e => {
     this.setState({
@@ -76,6 +88,7 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         >
+          
           <Tab key="account" tab={formatMessage({ id: 'app.login.tab-login-credentials' })}>
             {login.status === 'error' &&
               login.type === 'account' &&
