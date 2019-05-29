@@ -1,18 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
-import {
-  Form,
-  Input,
-  DatePicker,
-  Select,
-  Button,
-  Card,
-  InputNumber,
-  Radio,
-  Icon,
-  Tooltip,
-} from 'antd';
+import {Form,Input,DatePicker,Select,Button,Card,InputNumber, Radio,Icon,Tooltip,} from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './style.less';
 

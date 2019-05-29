@@ -1,6 +1,10 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-const b = 'http://192.168.0.128:53943';
+import { setAuthority } from '@/utils/authority';
+
+//const b = 'http://192.168.0.128:53943';
+const b = 'http://192.168.191.1:53943';
+
 export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
@@ -116,6 +120,30 @@ export async function fakeAccountLogin(param) {
       param,
      // method: 'post',
      method : "UserLogin", 
+    },
+  });
+}
+
+export async function userLogout(param) {
+  const _token = localStorage.getItem("acbc-token")
+  
+  // return request('/api/login/account', {
+  //   method: 'POST',
+  //   data: params,
+  // });
+  return request(b+'/api/config/GiftManage/user', {
+    // method: 'POST',
+    // data: params,
+    method: 'POST',
+    data: {
+      //param,
+      token : JSON.parse(_token).token,
+      param: {
+        status: false,
+        data: {authority: 'guest'}
+      },
+     // method: 'post',
+     method : "UserLogout", 
     },
   });
 }

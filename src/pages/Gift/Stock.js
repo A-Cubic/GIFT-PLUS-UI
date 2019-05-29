@@ -22,98 +22,103 @@ const { Search, TextArea } = Input;
 }))
 @Form.create()
 class Stock extends PureComponent {
-  state = { visible: false, done: false };
-
-  formLayout = {
-    labelCol: { span: 7 },
-    wrapperCol: { span: 13 },
+  state = { 
+    //visible: false, 
+    //done: false ,
+    shop:'预到店'
   };
 
+  // formLayout = {
+  //   labelCol: { span: 7 },
+  //   wrapperCol: { span: 13 },
+  // };
+
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'list/fetch',
-      payload: {
-        count: 5,
-      },
-    });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'list/fetch',
+    //   payload: {
+    //     count: 5,
+    //   },
+    // });
     this.init()
   }
 
   init(){
-    console.log('111getItem',localStorage.getItem("uesr-token"))
-    console.log('222getItem',localStorage)
-
     this.props.dispatch({
       type: 'StockModel/getData',
       payload: {
-       go:'777'
+        status:'预到店'
       },
     });
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-      current: undefined,
-    });
-  };
+  // showModal = () => {
+  //   this.setState({
+  //     visible: true,
+  //     current: undefined,
+  //   });
+  // };
 
-  showEditModal = item => {
-    this.setState({
-      visible: true,
-      current: item,
-    });
-  };
+  // showEditModal = item => {
+  //   this.setState({
+  //     visible: true,
+  //     current: item,
+  //   });
+  // };
 
-  handleDone = () => {
-    setTimeout(() => this.addBtn.blur(), 0);
-    this.setState({
-      done: false,
-      visible: false,
-    });
-  };
+  // handleDone = () => {
+  //   setTimeout(() => this.addBtn.blur(), 0);
+  //   this.setState({
+  //     done: false,
+  //     visible: false,
+  //   });
+  // };
 
-  handleCancel = () => {
-    setTimeout(() => this.addBtn.blur(), 0);
-    this.setState({
-      visible: false,
-    });
-  };
+  // handleCancel = () => {
+  //   setTimeout(() => this.addBtn.blur(), 0);
+  //   this.setState({
+  //     visible: false,
+  //   });
+  // };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    const { dispatch, form } = this.props;
-    const { current } = this.state;
-    const id = current ? current.id : '';
+  // handleSubmit = e => {
+  //   e.preventDefault();
+  //   const { dispatch, form } = this.props;
+  //   const { current } = this.state;
+  //   const id = current ? current.id : '';
 
-    setTimeout(() => this.addBtn.blur(), 0);
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      this.setState({
-        done: true,
-      });
-      dispatch({
-        type: 'list/submit',
-        payload: { id, ...fieldsValue },
-      });
-    });
-  };
+  //   setTimeout(() => this.addBtn.blur(), 0);
+  //   form.validateFields((err, fieldsValue) => {
+  //     if (err) return;
+  //     this.setState({
+  //       done: true,
+  //     });
+  //     dispatch({
+  //       type: 'list/submit',
+  //       payload: { id, ...fieldsValue },
+  //     });
+  //   });
+  // };
 
-  deleteItem = id => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'list/submit',
-      payload: { id },
-    });
-  };
+  // deleteItem = id => {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'list/submit',
+  //     payload: { id },
+  //   });
+  // };
 
   //点击遇到点
   handleSizeChange(e){
+    this.setState({
+      shop:e.target.value
+    })
+
     this.props.dispatch({
       type: 'StockModel/getData',
       payload: {
-       go:e.target.value
+        status:e.target.value
       },
     });
 
@@ -122,11 +127,14 @@ class Stock extends PureComponent {
 
 
   render() {
-    const {StockModel:data} = this.props;
-    const {
-      list: { list },
-      loading,
-    } = this.props;
+    const {StockModel:{dataAll:{item,pagination,list}}} = this.props;
+    //console.log(77788,pagination)
+    // const {
+    //   list: { list },
+    //   loading,
+    // } = this.props;
+
+
     // const {
     //   form: { getFieldDecorator },
     // } = this.props;
@@ -173,24 +181,24 @@ class Stock extends PureComponent {
     //   total: 50,
     // };
 
-    const ListContent = ({ data: { owner, createdAt, percent, status, like ,href, activeUser,message} }) => (
+    const ListContent = ({ data: { goodsName,goodsnum,proportion} }) => (
       <div className={styles.listContent}>
+        {/* <div className={styles.listContentItem}>
+          <span>商品名称</span>
+          <p>{goodsName}</p>
+        </div> */}
         <div className={styles.listContentItem}>
-          <span>状态</span>
-          <p>{status}</p>
-        </div>
-        <div className={styles.listContentItem}>
-          <span>数量</span>
+          <span>商品数量</span>
           {/* <p>{Math.ceil(Math.random() * 50) + 50}</p> */}
-          <p>{message}</p>
+          <p>{goodsnum}</p>
         </div>
-        <div className={styles.listContentItem}>
+        {/* <div className={styles.listContentItem}>
           <span>到店时间</span>
           <p>{moment(createdAt).format('YYYY-MM-DD HH:mm')}</p>
-        </div>
+        </div> */}
         <div className={styles.listContentItem}>
           <span>库存比</span>
-          <p><Progress percent={percent} status='active' strokeWidth={6} style={{ width: 180 }} /></p>
+          <p><Progress percent={proportion} status='active' strokeWidth={6} style={{ width: 180 }} /></p>
         </div>
       </div>
     );
@@ -201,13 +209,13 @@ class Stock extends PureComponent {
           <Card bordered={false}>
             <Row>
               <Col sm={8} xs={24}>
-                <Info title="预到商品" value="8个商品" bordered />
+                <Info title="预到商品" value={item.movinGoods} bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="当前店铺库存" value="32个商品" bordered />
+                <Info title="当前店铺库存" value={item.arriveGoods} bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="历史总库存" value="124个商品" />
+                <Info title="历史总库存" value={item.allGoods} />
               </Col>
             </Row>
           </Card>
@@ -223,42 +231,38 @@ class Stock extends PureComponent {
             <List
               size="large"
               rowKey="id"
-              loading={loading}
+             // loading={loading}
               //pagination={paginationProps}
+              
               pagination={{
+                
+
                 onChange: (page) => {
-      
                   this.props.dispatch({
                     type: 'StockModel/getData',
                     payload: {
-                      pageSize:page
+                      page:page,
+                      pageSize:pagination.pageSize,
+                      status:this.state.shop
                     },
                   });
                 },
                 onShowSizeChange: (current, pageSize) => {
-                  // const {match,dispatch}=this.props;
-                  // const {brandModel:{brandsGoods:{advimg,brandName,brandimg,goods,pagination}} } = this.props;
-                  // this.props.dispatch({
-                  //   type: 'brandModel/getBrandsGoods',
-                  //   payload: {
-                  //     brandsName:match.params.brandsName,
-      
-                  //     pageSize:pageSize
-                  //   },
-                  // });
-
+                
                   this.props.dispatch({
                     type: 'StockModel/getData',
                     payload: {
-                      pageSize:pageSize
+                      pageSize:pageSize,
+                      page:pagination.page,
+                      status:this.state.shop
                     },
                   });
 
       
                 },
                 //pageSize: pagination.pageSize,
-                pageSize:5,
-                total: 50,
+                pageSize:pagination.pageSize,
+                total: pagination.total,
                 showSizeChanger: true,
                 showQuickJumper: true,
               }}
@@ -266,9 +270,10 @@ class Stock extends PureComponent {
               renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
-                   // avatar={<Avatar src={item.logo} shape="square" size="large" />}
-                   // title={item.title}
-                    description={item.subDescription}
+                   avatar={<Avatar src={item.goodsImg} shape="square" style={{marginRight:'200px'}} size="large" />}
+                  //  title={item.title}
+                  title="商品名称"
+                    description={item.goodsName}
                   />
                   <ListContent data={item} />
                 </List.Item>

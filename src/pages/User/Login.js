@@ -48,22 +48,12 @@ class LoginPage extends Component {
         payload: {
           ...values,
           type,
-        },
-        callback: this.callbackType,
+        }
       });
       
     }
   };
-
-  callbackType = (param) => {
-    if(param.data.isonload == true){
-      localStorage.setItem('acbc-token',JSON.stringify(param.data))
-      localStorage.setItem('acbc-authority', param.data.power)
-    }
-    
-  } 
-
-
+  
 
   changeAutoLogin = e => {
     this.setState({

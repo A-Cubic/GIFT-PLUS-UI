@@ -1,11 +1,11 @@
 import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-import { getData} from '@/services/Stock_S';
+import { getData} from '@/services/ClerkRegistrationl_S';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 
 
 export default {
-  namespace: 'StockModel',
+  namespace: 'ClerkRegistrationModel',
 
   state: {
     dataAll: {
@@ -16,24 +16,25 @@ export default {
   },
 
   effects: {
-    //获取接口
-    *getData({ payload },{ call,put }){
+    // 店员注册
+    *getData({ payload,callback },{ call,put }){
+      
       const response = yield call(getData, payload);
       if(response!==undefined){
         if(response.msg.code == 4000){
-        
           yield put(routerRedux.push('/user/login'));
         } else {
-          yield put({
-            type: 'getDataR',
-            payload: response,
-          })
+          
+         
+          callback(response)
+          
         }
         
       }
     },
+  
 
-
+    
 
 
   },

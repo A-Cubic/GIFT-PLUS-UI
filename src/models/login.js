@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
+import { fakeAccountLogin, getFakeCaptcha,userLogout } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
@@ -59,7 +59,7 @@ export default {
       
           }
         }
-        callback(response)
+        //callback(response)
         yield put(routerRedux.replace(redirect || '/'));
       } else {
         message.error(response.data.msg);
@@ -72,15 +72,18 @@ export default {
       yield call(getFakeCaptcha, payload);
     },
 
-    *logout(_, { put }) {
-
+    // *logout(_, { put }) {
+    *logout({ payload ,callback}, { call, put }) {
+      const response = yield call(userLogout, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: {
           status: false,
-          currentAuthority: 'guest',
+          data: {authority: 'guest'}
         },
       });
+    
+
       reloadAuthorized();
       // redirect
       if (window.location.pathname !== '/user/login') {
@@ -98,7 +101,12 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      if(payload.data.isonload == true){
+        localStorage.setItem('acbc-token',JSON.stringify(payload.data))
+      } else{
+        localStorage.setItem('acbc-token','')
+      }
+      setAuthority(payload.data.authority);
       return {
         ...state,
         status: payload.status,

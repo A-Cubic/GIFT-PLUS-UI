@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Col } from 'antd';
+import React, { PureComponent }  from 'react';
+import { message,Row, Col, Form,Input,DatePicker,Select,Button,Card,InputNumber, Radio,Icon,Tooltip} from 'antd';
 import GGEditor, { Mind } from 'gg-editor';
 import EditorMinimap from '../components/EditorMinimap';
 import { MindContextMenu } from '../components/EditorContextMenu';
@@ -9,34 +9,130 @@ import data from '../mock/worldCup2018.json';
 import styles from '../Flow/index.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import { connect } from 'dva';
+import { formatMessage } from 'umi-plugin-react/locale';
 GGEditor.setTrackable(false);
 
-const MindPage = () => {
-  return (
-    <PageHeaderWrapper
-      title={<FormattedMessage id="app.editor.mind.title" />}
-      content={<FormattedMessage id="app.editor.mind.description" />}
-    >
-      <GGEditor className={styles.editor}>
-        <Row type="flex" className={styles.editorHd}>
-          <Col span={24}>
-            <MindToolbar />
-          </Col>
-        </Row>
-        <Row type="flex" className={styles.editorBd}>
-          <Col span={20} className={styles.editorContent}>
-            <Mind data={data} className={styles.mind} />
-          </Col>
-          <Col span={4} className={styles.editorSidebar}>
-            <MindDetailPanel />
-            <EditorMinimap />
-          </Col>
-        </Row>
-        <MindContextMenu />
-      </GGEditor>
-    </PageHeaderWrapper>
-  );
-};
+const FormItem = Form.Item;
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 
-export default MindPage;
+
+
+@connect(({ loading ,ClerkRegistrationModel}) => ({
+  submitting: loading.effects['form/submitRegularForm'],
+  ClerkRegistrationModel
+}))
+@Form.create()
+class orderList extends PureComponent {
+
+  state = { 
+    storeCode:'',
+    state:''
+  };
+
+
+
+
+  handleSubmit = e => {
+    const { dispatch, form } = this.props;
+    e.preventDefault();
+    
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        dispatch({
+          type: 'ClerkRegistrationModel/getData',
+          payload: values,
+          callback: this.callbackType,
+        });
+
+      }
+    });
+  };
+
+  callbackType = (params) => {
+    console.log('callbackType',params.data.msg)
+    if(params.data.type == 1){
+      message.success('注册成功')
+      this.handleFormReset()
+    } else {
+      message.error(params.data.msg);
+    }
+  }  
+  
+  handleFormReset =()=>{
+    this.props.form.resetFields();
+    
+  }
+
+  
+  
+
+  render() {
+    const { submitting } = this.props;
+    const {
+      form: { getFieldDecorator, getFieldValue },
+    } = this.props;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+        md: { span: 10 },
+      },
+    };
+
+    const submitFormLayout = {
+      wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 10, offset: 7 },
+      },
+    };
+
+    return (
+      <PageHeaderWrapper
+        title='店员注册'
+       
+      >
+        <Card bordered={false}>
+          <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
+            <FormItem {...formItemLayout} label='验证码'>
+              {getFieldDecorator('storeCode', {
+                rules: [{ required: true, message: '请输入手机验证码' }],
+              })(<Input placeholder="请输入手机验证码"/>)}
+            </FormItem>
+            <FormItem {...formItemLayout} label='可注册数量'>
+              {getFieldDecorator('state', {
+                rules: [{ required: true, message: '请输入注册数量' }],
+              })(<Input placeholder="请输入注册数量"/>)}
+            </FormItem>
+            
+            <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+             
+              <Row style={{marginTop:'15px', marginBottom:'5px',textAlign:'center'}}>
+                <Col md={24} sm={24}>
+                  <Button style={{textAlign:'center'}} type="primary" htmlType="submit" loading={submitting}>
+                    提交
+                  </Button>
+                  <Button onClick={this.handleFormReset} style={{ marginLeft: 8 }}>
+                    重置
+                  </Button>
+                </Col>
+              </Row>
+              {/* <Button style={{ marginLeft: 8 }}>
+                <FormattedMessage id="form.save" />
+              </Button> */}
+            </FormItem>
+          </Form>
+        </Card>
+      </PageHeaderWrapper>
+    );
+  }
+}
+
+export default orderList;

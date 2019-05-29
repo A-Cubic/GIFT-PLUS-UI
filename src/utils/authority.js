@@ -25,7 +25,5 @@ export function getAuthority(str) {
 export function setAuthority(authority) {
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
 
-
-
   return localStorage.setItem('acbc-authority', JSON.stringify(proAuthority));
 }

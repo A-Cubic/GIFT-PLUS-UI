@@ -23,7 +23,7 @@ export default [
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
     routes: [
-      { path: '/', redirect: '/dashboard/analysis', authority: ['admin', 'user'] },
+      { path: '/', redirect: '/dashboard/analysis', authority: ['admin', 'user','管理员','employee'] },
       {
         path: '/dashboard',
         name: 'dashboard',
@@ -56,7 +56,7 @@ export default [
           {
             path: '/order/list',
             name: 'list',
-            component: './Editor/GGEditor/Flow',
+            component: './Editor/GGEditor/orderList',
           },
         ],
       },

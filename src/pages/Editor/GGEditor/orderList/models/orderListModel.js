@@ -1,11 +1,11 @@
 import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-import { getData} from '@/services/Stock_S';
+import { getData} from '@/services/orderLis_s.js';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 
 
 export default {
-  namespace: 'StockModel',
+  namespace: 'orderListModel',
 
   state: {
     dataAll: {
@@ -32,8 +32,9 @@ export default {
         
       }
     },
+  
 
-
+    
 
 
   },

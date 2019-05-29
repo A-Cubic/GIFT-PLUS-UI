@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Col } from 'antd';
+import React, { PureComponent } from 'react';
+import { Row, Col,Card, Button, Icon, List } from 'antd';
 import GGEditor, { Flow } from 'gg-editor';
 import EditorMinimap from '../components/EditorMinimap';
 import { FlowContextMenu } from '../components/EditorContextMenu';
@@ -10,36 +10,153 @@ import styles from './index.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
+import { connect } from 'dva';
+import Ellipsis from '@/components/Ellipsis';
+
 GGEditor.setTrackable(false);
 
-const FlowPage = () => {
-  return (
-    <PageHeaderWrapper
-      title={<FormattedMessage id="app.editor.flow.title" />}
-      content={<FormattedMessage id="app.editor.flow.description" />}
-    >
-      <GGEditor className={styles.editor}>
-        <Row type="flex" className={styles.editorHd}>
-          <Col span={24}>
-            <FlowToolbar />
-          </Col>
-        </Row>
-        <Row type="flex" className={styles.editorBd}>
-          <Col span={4} className={styles.editorSidebar}>
-            <FlowItemPanel />
-          </Col>
-          <Col span={16} className={styles.editorContent}>
-            <Flow className={styles.flow} />
-          </Col>
-          <Col span={4} className={styles.editorSidebar}>
-            <FlowDetailPanel />
-            <EditorMinimap />
-          </Col>
-        </Row>
-        <FlowContextMenu />
-      </GGEditor>
-    </PageHeaderWrapper>
-  );
-};
+
+@connect(({ list, loading ,ShopAssistantListModel }) => ({
+  list,
+  loading: loading.models.list,
+  ShopAssistantListModel
+}))
+class FlowPage extends PureComponent {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'list/fetch',
+      payload: {
+        count: 8,
+      },
+    });
+    this.init()
+  }
+
+  init(){
+    this.props.dispatch({
+      type: 'ShopAssistantListModel/getData',
+      payload: {
+       
+      },
+    });
+  }
+  // handleDel(item,index) {
+  //   console.log('index',item)
+  //   this.props.dispatch({
+  //     type: 'ShopAssistantListModel/getDel',
+  //     payload: {
+  //       userCode:item.userCode
+  //     },
+  //     callback: this.callbackType,
+  //   });
+  // }
+
+  // callbackType = (params) => {
+  //   console.log('1111callbackType',params.data.item.type)
+  //   if(params.data.item.type == 1){
+  //     this.init()
+  //     console.log('ok')
+  //   }
+  // }  
+
+  render() {
+    const {ShopAssistantListModel:{dataAll:{item,pagination,list}}} = this.props;
+    // const {
+    //   list: { list },
+    //   loading,
+    // } = this.props;
+
+    const content = (
+      <div className={styles.pageHeaderContent}>
+        
+        
+      </div>
+    );
+
+    const extraContent = (
+      <div className={styles.extraImg}>
+        <img
+          alt="这是一个标题"
+          src="https://gw.alipayobjects.com/zos/rmsportal/RzwpdLnhmvDJToTdfDPe.png"
+        />
+      </div>
+    );
+
+    return (
+      // <PageHeaderWrapper title="店员列表" content={content} extraContent={extraContent}>
+      <PageHeaderWrapper title="店员列表" >
+        <div className={styles.cardList}>
+          <List
+            rowKey="id"
+           // loading={loading}
+            grid={{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
+            dataSource={['', ...list]}
+            pagination={{
+                
+
+              onChange: (page) => {
+                this.props.dispatch({
+                  type: 'StockModel/getData',
+                  payload: {
+                    page:page,
+                    pageSize:pagination.pageSize,
+            
+                  },
+                });
+              },
+              onShowSizeChange: (current, pageSize) => {
+               // console.log('999')
+                this.props.dispatch({
+                  type: 'StockModel/getData',
+                  payload: {
+                    pageSize:pageSize,
+                    page:pagination.page,
+                 
+                  },
+                });
+
+    
+              },
+              pageSize:pagination.pageSize,
+              total: pagination.total,
+              showSizeChanger: true,
+              showQuickJumper: true,
+            }}
+            renderItem={(item ,index)=>
+              item ? (
+                <List.Item key={item.id}>
+                  {/* <Card hoverable className={styles.card} actions={[<a onClick={() => {this.handleDel(item,index)}}>删除</a>]}> */}
+                  <Card hoverable className={styles.card} >
+                    <Card.Meta
+                      avatar={<img className={styles.cardAvatar} src={item.img} />}
+                      title={<a className={styles.cards} style={{paddingTop:'12px'}}>{item.userName}</a>}
+                      // description={
+                      //   <Ellipsis className={styles.item} lines={3}>
+                      //     {item.description}
+                      //   </Ellipsis>
+                      // }
+                    />
+                    <p className={styles.cards} style={{marginTop:'25px'}}>电话：{item.phone}</p>
+                    <p className={styles.cards} >性别：{item.sex}</p>
+                    
+                
+                  </Card>
+                </List.Item>
+              ) : (
+                <span></span>
+                // <List.Item>
+                //   <Button type="dashed" className={styles.newButton}>
+                //     <Icon type="plus" /> 新建产品
+                //   </Button>
+                // </List.Item>
+              )
+            }
+          />
+        </div>
+      </PageHeaderWrapper>
+    );
+  }
+}
 
 export default FlowPage;
