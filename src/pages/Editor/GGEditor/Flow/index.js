@@ -24,12 +24,12 @@ GGEditor.setTrackable(false);
 class FlowPage extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'list/fetch',
-      payload: {
-        count: 8,
-      },
-    });
+    // dispatch({
+    //   type: 'list/fetch',
+    //   payload: {
+    //     count: 8,
+    //   },
+    // });
     this.init()
   }
 
@@ -97,7 +97,7 @@ class FlowPage extends PureComponent {
 
               onChange: (page) => {
                 this.props.dispatch({
-                  type: 'StockModel/getData',
+                  type: 'ShopAssistantListModel/getData',
                   payload: {
                     page:page,
                     pageSize:pagination.pageSize,
@@ -108,7 +108,7 @@ class FlowPage extends PureComponent {
               onShowSizeChange: (current, pageSize) => {
                // console.log('999')
                 this.props.dispatch({
-                  type: 'StockModel/getData',
+                  type: 'ShopAssistantListModel/getData',
                   payload: {
                     pageSize:pageSize,
                     page:pagination.page,

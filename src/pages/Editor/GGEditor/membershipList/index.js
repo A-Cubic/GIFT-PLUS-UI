@@ -20,12 +20,12 @@ const { TextArea } = Input;
 
 
 
-@connect(({ loading ,orderListModel}) => ({
+@connect(({ loading ,membershipListModel}) => ({
   submitting: loading.effects['form/submitRegularForm'],
-  orderListModel
+  membershipListModel
 }))
 @Form.create()
-class MindPage extends PureComponent {
+class membershipList extends PureComponent {
 
   state = { 
     storeCode:'',
@@ -33,17 +33,19 @@ class MindPage extends PureComponent {
     formValues:{},
     visible: false,
     visibleChildCheck:false,
+    pagination:{}
   };
 
   componentDidMount() {
     this.init()
+    
   }
 
   init(){
     this.props.dispatch({
-      type: 'orderListModel/getData',
+      type: 'membershipListModel/getData',
       payload: {
-        //state:"预到店"
+        
       },
     });
   }
@@ -66,7 +68,7 @@ class MindPage extends PureComponent {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'orderListModel/getData',
+        type: 'membershipListModel/getData',
         payload: {
           ...values,
         },
@@ -82,15 +84,21 @@ class MindPage extends PureComponent {
     this.init();
   }
   handleTableChange=(pagination, filters, sorter)=>{
+    console.log('pagination',pagination)
     const params = {
       ...pagination,
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'orderListModel/getData',
+      type: 'membershipListModel/getData',
       payload: params,
     });
   }
+
+ 
+
+
+
 
   handleVisible = (flag,who) => {
     this.setState({
@@ -111,31 +119,31 @@ class MindPage extends PureComponent {
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
+          {/* <Col md={8} sm={24}>
             <FormItem label="时间段：">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
-          </Col>
+          </Col> */}
           <Col md={8} sm={24}>
-            <FormItem label="订单号：">
-              {getFieldDecorator('orderCode')(
-                <Input style={{ width: '100%' }} placeholder="请输入订单号" />
+            <FormItem label="姓名：">
+              {getFieldDecorator('userName')(
+                <Input style={{ width: '100%' }} placeholder="请输入姓名" />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="订单状态：">
-              {getFieldDecorator('state')(
-                 <Select  placeholder="请选择">
-                  <Option value="预到店">预到店</Option>
-                  <Option value="已到店">已到店</Option>
+            <FormItem label="性别">
+              {getFieldDecorator('sex')(
+                 <Select  placeholder="请选择性别">
+                  <Option value="男">男</Option>
+                  <Option value="女">女</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={8} sm={24} >
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </Col>
@@ -152,8 +160,8 @@ class MindPage extends PureComponent {
   
 
   render() {
-    const { orderListModel:{dataAll:{item,list,pagination}} } = this.props;
-   // console.log('777',list)
+    const { membershipListModel:{dataAll:{item,list,pagination}} } = this.props;
+    //console.log('777',list)
 
     const { submitting } = this.props;
     const {
@@ -189,31 +197,39 @@ class MindPage extends PureComponent {
         title: '序号',
         dataIndex: 'key',
         key: 'key',
-      },{
-        title: '状态',
+      },
+      {
+        title: '姓名',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '图片',
         dataIndex: 'state',
         key: 'state',
-      } ,{
-        title: '时间段',
-        dataIndex: 'payTime',
-        key: 'payTime',
+        render: (val,record) => (
+          <div>
+            <span>{val}</span>
+            <img src={ record.img} alt="" width={35} style={{marginLeft:0}}/>
+          </div>
+        )
+      } 
+      , {
+        title: '性别',
+        dataIndex: 'sex',
+        key: 'sex',
       }
       , {
-        title: '价格',
-        dataIndex: 'price',
-        key: 'price',
-      }
-      , {
-        title: '订单号',
-        dataIndex: 'orderCode',
-        key: 'orderCode',
+        title: '电话',
+        dataIndex: 'phone',
+        key: 'phone',
       }
       
     ];
 
     return (
       <PageHeaderWrapper
-        title='订单列表'
+        title='会员列表'
       >
         <Card bordered={false}>
 
@@ -238,4 +254,4 @@ class MindPage extends PureComponent {
   }
 }
 
-export default MindPage;
+export default membershipList;

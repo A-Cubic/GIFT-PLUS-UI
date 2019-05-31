@@ -241,7 +241,7 @@ class Stock extends PureComponent {
                   this.props.dispatch({
                     type: 'StockModel/getData',
                     payload: {
-                      page:page,
+                      current:page,
                       pageSize:pagination.pageSize,
                       status:this.state.shop
                     },
@@ -253,7 +253,7 @@ class Stock extends PureComponent {
                     type: 'StockModel/getData',
                     payload: {
                       pageSize:pageSize,
-                      page:pagination.page,
+                      current:pagination.page,
                       status:this.state.shop
                     },
                   });

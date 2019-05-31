@@ -32,6 +32,22 @@ class orderList extends PureComponent {
     state:''
   };
 
+  componentDidMount() {
+    this.init()
+  }
+
+  init(){
+    
+    this.props.dispatch({
+      type: 'ClerkRegistrationModel/getClerk',
+      payload: {
+       
+      },
+    });
+  }
+
+
+
 
 
 
@@ -56,6 +72,7 @@ class orderList extends PureComponent {
     if(params.data.type == 1){
       message.success('注册成功')
       this.handleFormReset()
+      this.init()
     } else {
       message.error(params.data.msg);
     }
@@ -70,6 +87,8 @@ class orderList extends PureComponent {
   
 
   render() {
+    const {ClerkRegistrationModel:{dataAll:{item}}} = this.props;
+
     const { submitting } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
@@ -100,6 +119,8 @@ class orderList extends PureComponent {
        
       >
         <Card bordered={false}>
+          <div style={{textAlign:'center',fontSize:'18px',marginBottom:'10px'}}>原验证码：{item.storeCode}</div>
+          <div style={{textAlign:'center',fontSize:'18px',marginBottom:'10px'}}>原可注册数量：{item.state}</div>
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
             <FormItem {...formItemLayout} label='验证码'>
               {getFieldDecorator('storeCode', {

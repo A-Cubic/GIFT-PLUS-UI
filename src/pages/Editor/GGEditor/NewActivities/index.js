@@ -33,6 +33,8 @@ class MindPage extends PureComponent {
     formValues:{},
     visible: false,
     visibleChildCheck:false,
+    disabled: false,
+    value: 1,
   };
 
   componentDidMount() {
@@ -43,7 +45,7 @@ class MindPage extends PureComponent {
     this.props.dispatch({
       type: 'orderListModel/getData',
       payload: {
-        //state:"预到店"
+        state:"预到店"
       },
     });
   }
@@ -98,7 +100,13 @@ class MindPage extends PureComponent {
     });
   }
 
-
+  onChange = e => {
+    console.log('radio checked', e.target.value);
+    this.setState({
+      value: e.target.value,
+      disabled: !this.state.disabled,
+    });
+  };
 
   
 
@@ -106,10 +114,28 @@ class MindPage extends PureComponent {
   renderForm(){
   //const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+        md: { span: 10 },
+      },
+    };
+
     //console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
+
+        <FormItem {...formItemLayout} label='验证码'>
+          {getFieldDecorator('storeCode', {
+            rules: [{ required: true, message: '请输入手机验证码' }],
+          })(<Input placeholder="请输入手机验证码"/>)}
+        </FormItem>
+
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="时间段：">
@@ -135,6 +161,32 @@ class MindPage extends PureComponent {
               )}
             </FormItem>
           </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="订单状态：">
+              {/* {getFieldDecorator('p')(
+                <Radio.Group onChange={this.onChange} value={this.state.value}>
+                 <Radio value={1}>是</Radio>
+                 <Radio value={2}>否</Radio>
+                </Radio.Group>
+              )} */}
+               {getFieldDecorator('p', {
+                initialValue: 1,
+                //rules: [{ required: true, message: '请输入姓名' }],
+              })(
+                //<Input placeholder="请输入姓名"/>
+                <Radio.Group onChange={this.onChange} value={this.state.value}>
+                 <Radio value={1}>是</Radio>
+                 <Radio value={2}>否</Radio>
+                </Radio.Group>
+              )}
+
+
+
+            </FormItem>     
+          </Col>
+
+
+
           <Col md={8} sm={24}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>

@@ -1,11 +1,11 @@
 import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-import { getData ,getClerk} from '@/services/ClerkRegistrationl_S';
+import { getData} from '@/services/orderLis_s.js';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 
 
 export default {
-  namespace: 'ClerkRegistrationModel',
+  namespace: 'orderListModel',
 
   state: {
     dataAll: {
@@ -16,32 +16,16 @@ export default {
   },
 
   effects: {
-    // 店员注册
-    *getData({ payload,callback },{ call,put }){
-      
+    //获取接口
+    *getData({ payload },{ call,put }){
       const response = yield call(getData, payload);
       if(response!==undefined){
         if(response.msg.code == 4000){
-          yield put(routerRedux.push('/user/login'));
-        } else {
-          
-         
-          callback(response)
-          
-        }
         
-      }
-    },
-
-
-    *getClerk({ payload },{ call,put }){
-      const response = yield call(getClerk, payload);
-      if(response!==undefined){
-        if(response.msg.code == 4000){
           yield put(routerRedux.push('/user/login'));
         } else {
           yield put({
-            type: 'getClerkR',
+            type: 'getDataR',
             payload: response,
           })
         }
@@ -56,12 +40,11 @@ export default {
   },
 
   reducers: {
-    getClerkR(state, action){
-      console.log('xxx',action.payload.data)
+    getDataR(state, action){
       return {
         ...state,
         dataAll: {
-          item:action.payload.data,
+          item:action.payload.data.item,
           list:action.payload.data.list,
           pagination:action.payload.data.pagination
         }

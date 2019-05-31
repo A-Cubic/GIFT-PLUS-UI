@@ -20,3 +20,17 @@ export async function getData(param) {
           },
   });
 }
+
+//获取验证码
+export async function getClerk(param) {
+  //console.log('获取')
+  const _token = localStorage.getItem("acbc-token")
+  return request(b+'/api/config/GiftManage/Employee', {
+    method: 'POST',
+    data: {
+          token : JSON.parse(_token).token,
+          method : "CheckOldStoreCode", 
+          param,
+          },
+  });
+}

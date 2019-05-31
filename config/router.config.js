@@ -85,12 +85,12 @@ export default [
           {
             path: '/activity/list',
             name: 'list',
-            component: './Editor/GGEditor/Flow',
+            component: './Editor/GGEditor/activityList',
           },
           {
             path: '/activity/new',
             name: 'new',
-            component: './Editor/GGEditor/Mind',
+            component: './Editor/GGEditor/NewActivitiesxxx',
           },
         ],
       },
@@ -102,7 +102,7 @@ export default [
           {
             path: '/member/list',
             name: 'list',
-            component: './Editor/GGEditor/Flow',
+            component: './Editor/GGEditor/membershipList',
           },
         ],
       },
