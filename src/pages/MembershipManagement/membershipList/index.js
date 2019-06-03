@@ -1,12 +1,12 @@
 import React, { PureComponent }  from 'react';
 import {Table ,Divider , message,Row, Col, Form,Input,DatePicker,Select,Button,Card,InputNumber, Radio,Icon,Tooltip} from 'antd';
 import GGEditor, { Mind } from 'gg-editor';
-import EditorMinimap from '../components/EditorMinimap';
-import { MindContextMenu } from '../components/EditorContextMenu';
-import { MindToolbar } from '../components/EditorToolbar';
-import { MindDetailPanel } from '../components/EditorDetailPanel';
-import data from '../mock/worldCup2018.json';
-import styles from '../orderList/index.less';
+// import EditorMinimap from '../components/EditorMinimap';
+// import { MindContextMenu } from '../components/EditorContextMenu';
+// import { MindToolbar } from '../components/EditorToolbar';
+// import { MindDetailPanel } from '../components/EditorDetailPanel';
+// import data from '../mock/worldCup2018.json';
+import styles from '../membershipList/index.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { connect } from 'dva';

@@ -1,16 +1,20 @@
 import React, { PureComponent ,Fragment }  from 'react';
 import { Table ,message,Row, Col, Form,Input,DatePicker,Select,Button,Card,InputNumber, Radio,Icon,Tooltip} from 'antd';
 import GGEditor, { Mind } from 'gg-editor';
-import EditorMinimap from '../components/EditorMinimap';
-import { MindContextMenu } from '../components/EditorContextMenu';
-import { MindToolbar } from '../components/EditorToolbar';
-import { MindDetailPanel } from '../components/EditorDetailPanel';
-import data from '../mock/worldCup2018.json';
-import styles from '../NewActivitiesxxx/index.less';
+// import EditorMinimap from '../components/EditorMinimap';
+// import { MindContextMenu } from '../components/EditorContextMenu';
+// import { MindToolbar } from '../components/EditorToolbar';
+// import { MindDetailPanel } from '../components/EditorDetailPanel';
+// import data from '../mock/worldCup2018.json';
+import styles from '../NewActivities/index.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
+
+import { routerRedux } from 'dva/router';
+
+
 GGEditor.setTrackable(false);
 
 const FormItem = Form.Item;
@@ -120,7 +124,45 @@ class orderList extends PureComponent {
     });
   }
 
+  //选择发货商品按钮
+  onhandleGoods = (e) => {
+   // const { roleOperationDistribution:{deliveryForm:{tableData:{list, pagination,item}}} } = this.props;
+  
+   e.preventDefault();
+   this.props.form.validateFields((err, fieldsValue) => {
+     if (err) return;
+     const rangeValue = fieldsValue['date'];
+     const values = rangeValue==undefined ? {
+       ...fieldsValue,
+     }:{
+       ...fieldsValue,
+       'date': rangeValue==''?[]:[rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')],
+     };
 
+     this.setState({
+       formValues: values,
+     });
+     console.log('values',values)
+    //  this.props.dispatch({
+    //    type: 'NewActivitiesModel/getSubmit',
+    //    payload: {
+    //      ...values,
+    //    },
+    //  });
+    this.props.dispatch({
+      type: 'NewActivitiesModel/getRecordR',
+      payload: {
+        ...values,
+      },
+    });
+    this.props.dispatch(routerRedux.push('/chooseCommodity'  ))
+
+
+    
+   }); 
+
+
+  }
 
 
 
@@ -132,7 +174,7 @@ class orderList extends PureComponent {
 
     const { orderListModel:{dataAll:{item,list,pagination}} } = this.props;
     console.log('777',list)
-
+    console.log('item',item)
     const { submitting } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
@@ -263,7 +305,7 @@ class orderList extends PureComponent {
               })(<Input placeholder="请输入奖励上限值"/>)}
             </FormItem>     
             
-            <Button type="primary" style={{margin:'7px'}}>选择商品</Button >
+            <Button type="primary" style={{margin:'7px'}} onClick={this.onhandleGoods}>选择商品</Button >
             <Table dataSource={list}
                  // scroll={{ x: 1500}}
                  rowKey={record => record.key}

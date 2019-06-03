@@ -1,21 +1,27 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
+import currency from '../utils/currency.js'
 
-//const b = 'http://192.168.0.128:53943';
-const b = 'http://192.168.191.1:53943';
-//import {apiUrl,testUrl} from '@/utils/request';
-
-
-
-//提交新怎活动
+//提交新增活动
 export async function getSubmit(param) {
-  //console.log('获取')
-  const _token = localStorage.getItem("acbc-token")
-  return request(b+'/api/config/GiftManage/Active', {
+  //console.log(currency.GetApiUrl())
+  return request(currency.GetApiUrl() + '/api/giftmanage/GiftManage/Active', {
     method: 'POST',
     data: {
-          token : JSON.parse(_token).token,
+          token: currency.GetToken(),
           method : "AddActive", 
+          param,
+          },
+  });
+}
+
+//获取选择商品接口 
+export async function getChooseCommodityData(param) {
+  return request(currency.GetApiUrl() + '/api/giftmanage/GiftManage/Active', {
+    method: 'POST',
+    data: {
+          token: currency.GetToken(),
+          method : "GoodsList", 
           param,
           },
   });

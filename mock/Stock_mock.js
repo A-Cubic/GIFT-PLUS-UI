@@ -202,5 +202,5 @@ export default {
   //测试接口  radarOriginData
   
  // 'POST /llback/AccountFund/GetRetailMoney':radarOriginData,
-  //'POST /api/config/User/UserLogin':radarOriginData,
+  //'POST /api/giftmanage/User/UserLogin':radarOriginData,
 };

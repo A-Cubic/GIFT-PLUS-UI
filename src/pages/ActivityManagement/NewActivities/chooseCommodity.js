@@ -1,16 +1,16 @@
-import React, { PureComponent }  from 'react';
-import {Table ,Divider , message,Row, Col, Form,Input,DatePicker,Select,Button,Card,InputNumber, Radio,Icon,Tooltip} from 'antd';
+import React, { PureComponent ,Fragment}  from 'react';
+import {Checkbox ,Table ,Divider , message,Row, Col, Form,Input,DatePicker,Select,Button,Card,InputNumber, Radio,Icon,Tooltip} from 'antd';
 import GGEditor, { Mind } from 'gg-editor';
-import EditorMinimap from '../components/EditorMinimap';
-import { MindContextMenu } from '../components/EditorContextMenu';
-import { MindToolbar } from '../components/EditorToolbar';
-import { MindDetailPanel } from '../components/EditorDetailPanel';
-import data from '../mock/worldCup2018.json';
-import styles from '../orderList/index.less';
+// import EditorMinimap from '../components/EditorMinimap';
+// import { MindContextMenu } from '../components/EditorContextMenu';
+// import { MindToolbar } from '../components/EditorToolbar';
+// import { MindDetailPanel } from '../components/EditorDetailPanel';
+// import data from '../mock/worldCup2018.json';
+import styles from '../NewActivities/index.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { connect } from 'dva';
-import { formatMessage } from 'umi-plugin-react/locale';
+//import { formatMessage } from 'umi-plugin-react/locale';
 GGEditor.setTrackable(false);
 
 const FormItem = Form.Item;
@@ -20,12 +20,12 @@ const { TextArea } = Input;
 
 
 
-@connect(({ loading ,orderListModel}) => ({
-  submitting: loading.effects['form/submitRegularForm'],
-  orderListModel
+@connect(({ NewActivitiesModel}) => ({
+ 
+  NewActivitiesModel
 }))
 @Form.create()
-class MindPage extends PureComponent {
+class chooseCommodity extends PureComponent {
 
   state = { 
     storeCode:'',
@@ -33,8 +33,6 @@ class MindPage extends PureComponent {
     formValues:{},
     visible: false,
     visibleChildCheck:false,
-    disabled: false,
-    value: 1,
   };
 
   componentDidMount() {
@@ -43,9 +41,9 @@ class MindPage extends PureComponent {
 
   init(){
     this.props.dispatch({
-      type: 'orderListModel/getData',
+      type: 'NewActivitiesModel/getChooseCommodityData',
       payload: {
-        state:"预到店"
+        //state:"预到店"
       },
     });
   }
@@ -89,7 +87,7 @@ class MindPage extends PureComponent {
       ...this.state.formValues,
     };
     this.props.dispatch({
-      type: 'orderListModel/getData',
+      type: 'NewActivitiesModel/getChooseCommodityData',
       payload: params,
     });
   }
@@ -100,42 +98,44 @@ class MindPage extends PureComponent {
     });
   }
 
-  onChange = e => {
-    console.log('radio checked', e.target.value);
-    this.setState({
-      value: e.target.value,
-      disabled: !this.state.disabled,
+  //勾选
+  Checklist = (e, record, index)=>{
+    this.props.dispatch({
+      type: 'roleOperationDistribution/getChecklist',
+      payload: {
+        id: this.props.roleOperationDistribution.selectProduct.tableData.item.id,
+        usercode:this.props.roleOperationDistribution.selectProduct.usercode,
+        ischoose:e.target.checked,
+        barcode:record.barcode
+      },
     });
-  };
+  }
+
+
+ //点击发货单
+  handleInvoice = () => {
+    this.props.dispatch({
+      type: 'roleOperationDistribution/getPaging',
+      payload: {
+        id: this.props.roleOperationDistribution.selectProduct.tableData.item.id,
+      },
+    });
+    //  this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
+    this.props.dispatch(routerRedux.push('/delivery/returnDeliveryForm' ));  
+  }
 
   
 
 
-  renderForm(){
-  //const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
-    const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 7 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-        md: { span: 10 },
-      },
-    };
 
+
+  renderForm(){
+    const { NewActivitiesModel:{chooseCommodity:{item,list,pagination}} } = this.props;
+    const { getFieldDecorator } = this.props.form;
+    
     //console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
-
-        <FormItem {...formItemLayout} label='验证码'>
-          {getFieldDecorator('storeCode', {
-            rules: [{ required: true, message: '请输入手机验证码' }],
-          })(<Input placeholder="请输入手机验证码"/>)}
-        </FormItem>
-
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="时间段：">
@@ -162,32 +162,6 @@ class MindPage extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="订单状态：">
-              {/* {getFieldDecorator('p')(
-                <Radio.Group onChange={this.onChange} value={this.state.value}>
-                 <Radio value={1}>是</Radio>
-                 <Radio value={2}>否</Radio>
-                </Radio.Group>
-              )} */}
-               {getFieldDecorator('p', {
-                initialValue: 1,
-                //rules: [{ required: true, message: '请输入姓名' }],
-              })(
-                //<Input placeholder="请输入姓名"/>
-                <Radio.Group onChange={this.onChange} value={this.state.value}>
-                 <Radio value={1}>是</Radio>
-                 <Radio value={2}>否</Radio>
-                </Radio.Group>
-              )}
-
-
-
-            </FormItem>     
-          </Col>
-
-
-
-          <Col md={8} sm={24}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
           </Col>
@@ -204,8 +178,15 @@ class MindPage extends PureComponent {
   
 
   render() {
-    const { orderListModel:{dataAll:{item,list,pagination}} } = this.props;
+    const { NewActivitiesModel:{chooseCommodity:{item,list,pagination}} } = this.props;
    // console.log('777',list)
+
+  const { selectedRowKeys } = this.state;
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: this.onSelectedRowKeysChange
+  };
+
 
     const { submitting } = this.props;
     const {
@@ -236,32 +217,88 @@ class MindPage extends PureComponent {
       showQuickJumper: true,
       ...pagination,
     };
+    // const columns = [
+    //   {
+    //     title: '序号',
+    //     dataIndex: 'key',
+    //     key: 'key',
+    //   },{
+    //     title: '状态',
+    //     dataIndex: 'state',
+    //     key: 'state',
+    //   } ,{
+    //     title: '时间段',
+    //     dataIndex: 'payTime',
+    //     key: 'payTime',
+    //   }
+    //   , {
+    //     title: '价格',
+    //     dataIndex: 'price',
+    //     key: 'price',
+    //   }
+    //   , {
+    //     title: '订单号',
+    //     dataIndex: 'orderCode',
+    //     key: 'orderCode',
+    //   }
+      
+    // ];
+
     const columns = [
       {
-        title: '序号',
-        dataIndex: 'key',
-        key: 'key',
-      },{
-        title: '状态',
-        dataIndex: 'state',
-        key: 'state',
-      } ,{
-        title: '时间段',
-        dataIndex: 'payTime',
-        key: 'payTime',
-      }
-      , {
-        title: '价格',
-        dataIndex: 'price',
-        key: 'price',
-      }
-      , {
-        title: '订单号',
-        dataIndex: 'orderCode',
-        key: 'orderCode',
-      }
-      
+        title: '选择',
+        dataIndex: 'qq',
+        key: 'qq',
+        render: (text, record, index) => {
+          return (
+            <Fragment>
+              {/* <a href="javascript:;" onClick={(e) => this.handleDelCheck(e, record, index)}>删除</a><br/> */}
+              <Checkbox
+                onChange={(e) => this.Checklist(e, record, index)}
+                defaultChecked = {record.ischoose}
+              >
+              </Checkbox>
+            </Fragment>
+          )
+        }
+      },
+    {
+      title: '序号',
+      dataIndex: 'key',
+      key: 'key',
+    }, {
+      title: '图',
+      dataIndex: 'png',
+      key: 'png',
+      render: (val,record) => (
+        <div>
+          <span>{val}</span>
+          <img src={ record.img} alt="" width={40} style={{marginLeft:0}}/>
+        </div>
+      )
+    },  {
+      title: '商品名称',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
+
+    },{
+      title: '仓库',
+      dataIndex: 'warehouse',
+      key: 'warehouse',
+    }
     ];
+
+    const props = {
+    //  action: getUploadUrl(),
+    //  headers: getHeader(),
+      showUploadList: false,
+      // listType: 'picture',
+      // accept:'image/*',
+      onChange: this.handleUploadChange,
+      multiple: false,
+      // customRequest:this.upload,
+    };
+
 
     return (
       <PageHeaderWrapper
@@ -275,13 +312,21 @@ class MindPage extends PureComponent {
             </div>
           </div>
 
-          <Table dataSource={list}
+          {/* <Table dataSource={list}
                  // scroll={{ x: 1500}}
                  rowKey={record => record.key}
                  columns={columns}
                  pagination={paginationProps}
                  onChange={this.handleTableChange}
                  // loading={submitting}
+          /> */}
+
+          <Table dataSource={list}
+            // scroll={{ x: 1500}}
+            rowKey={record => record.key}
+            columns={columns}
+            pagination={paginationProps}
+            onChange={this.handleTableChange}
           />
           
         </Card>
@@ -290,4 +335,4 @@ class MindPage extends PureComponent {
   }
 }
 
-export default MindPage;
+export default chooseCommodity;

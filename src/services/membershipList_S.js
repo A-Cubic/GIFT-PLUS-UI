@@ -8,7 +8,7 @@ const b = 'http://192.168.191.1:53943';
 
 export async function getData(param) {
   const _token = localStorage.getItem("acbc-token")
-  return request(b+'/api/config/GiftManage/Member', {
+  return request(b+'/api/giftmanage/GiftManage/Member', {
     method: 'POST',
     data: {
           token : JSON.parse(_token).token,

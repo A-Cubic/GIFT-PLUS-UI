@@ -112,7 +112,7 @@ export async function fakeAccountLogin(param) {
   //   method: 'POST',
   //   data: params,
   // });
-  return request(b+'/api/config/GiftManage/user', {
+  return request(b+'/api/giftmanage/GiftManage/user', {
     // method: 'POST',
     // data: params,
     method: 'POST',
@@ -131,7 +131,7 @@ export async function userLogout(param) {
   //   method: 'POST',
   //   data: params,
   // });
-  return request(b+'/api/config/GiftManage/user', {
+  return request(b+'/api/giftmanage/GiftManage/user', {
     // method: 'POST',
     // data: params,
     method: 'POST',

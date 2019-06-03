@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import { Row, Col,Card, Button, Icon, List } from 'antd';
 import GGEditor, { Flow } from 'gg-editor';
-import EditorMinimap from '../components/EditorMinimap';
-import { FlowContextMenu } from '../components/EditorContextMenu';
-import { FlowToolbar } from '../components/EditorToolbar';
-import { FlowItemPanel } from '../components/EditorItemPanel';
-import { FlowDetailPanel } from '../components/EditorDetailPanel';
+// import EditorMinimap from '../components/EditorMinimap';
+// import { FlowContextMenu } from '../components/EditorContextMenu';
+// import { FlowToolbar } from '../components/EditorToolbar';
+// import { FlowItemPanel } from '../components/EditorItemPanel';
+// import { FlowDetailPanel } from '../components/EditorDetailPanel';
 import styles from './index.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';

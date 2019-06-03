@@ -56,10 +56,13 @@ export default [
           {
             path: '/order/list',
             name: 'list',
-            component: './Editor/GGEditor/orderList',
+            component: './OrderList'
           },
         ],
       },
+
+     
+      //店员管理
       {
         name: 'staff',
         icon: 'team',
@@ -68,15 +71,18 @@ export default [
           {
             path: '/staff/list',
             name: 'list',
-            component: './Editor/GGEditor/Flow',
+            // component: './Editor/GGEditor/Flow',
+            component: './ClerkManagement/ShopAssistantList',
           },
           {
             path: '/staff/reg',
             name: 'reg',
-            component: './Editor/GGEditor/Mind',
+            // component: './Editor/GGEditor/Mind',
+            component: './ClerkManagement/ClerkRegistration',
           },
         ],
       },
+      //活动管理
       {
         name: 'activity',
         icon: 'bulb',
@@ -85,15 +91,27 @@ export default [
           {
             path: '/activity/list',
             name: 'list',
-            component: './Editor/GGEditor/activityList',
+            // component: './Editor/GGEditor/activityList',
+            component: './ActivityManagement/activityList',
           },
           {
             path: '/activity/new',
             name: 'new',
-            component: './Editor/GGEditor/NewActivitiesxxx',
+            //  component: './Editor/GGEditor/NewActivities',
+            component: './ActivityManagement/NewActivities',
           },
+          
         ],
       },
+       //选择商品
+      {
+        path: '/chooseCommodity',
+        name: 'chooseCommodity',
+        // component: './Editor/GGEditor/NewActivities/chooseCommodity',
+        component: './ActivityManagement/NewActivities/chooseCommodity',
+        hideInMenu: true,
+      },
+
       {
         name: 'member',
         icon: 'user',
@@ -102,10 +120,13 @@ export default [
           {
             path: '/member/list',
             name: 'list',
-            component: './Editor/GGEditor/membershipList',
+            // component: './Editor/GGEditor/membershipList',
+            component: './MembershipManagement/membershipList',
           },
         ],
       },
+      
+
       {
         name: 'finance',
         icon: 'property-safety',

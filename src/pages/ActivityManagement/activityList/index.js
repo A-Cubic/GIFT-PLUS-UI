@@ -55,10 +55,7 @@ class activityList extends PureComponent {
 
   render() {
     const { activityListModel:{dataAll:{item,pagination,list}} } = this.props;
-
-    console.log(777,list)
-
-
+    //console.log(777,list)
     // const {
     //   list: { list },
     //   loading,
@@ -156,7 +153,7 @@ class activityList extends PureComponent {
 
   
             },
-            pageSize:pagination.pageSize,
+            //pageSize:pagination.pageSize,
             total: pagination.total,
             showSizeChanger: true,
             showQuickJumper: true,
