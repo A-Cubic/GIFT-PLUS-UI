@@ -201,6 +201,6 @@ export default {
   'GET /api/fake_chart_data': getFakeChartData,
   //测试接口  radarOriginData
   
- // 'POST /llback/AccountFund/GetRetailMoney':radarOriginData,
+  //'POST /llback/AccountFund/GetRetailMoney':radarOriginData,
   //'POST /api/giftmanage/User/UserLogin':radarOriginData,
 };

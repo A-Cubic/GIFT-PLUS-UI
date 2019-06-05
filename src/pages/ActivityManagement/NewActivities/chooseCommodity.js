@@ -1,15 +1,11 @@
 import React, { PureComponent ,Fragment}  from 'react';
 import {Checkbox ,Table ,Divider , message,Row, Col, Form,Input,DatePicker,Select,Button,Card,InputNumber, Radio,Icon,Tooltip} from 'antd';
 import GGEditor, { Mind } from 'gg-editor';
-// import EditorMinimap from '../components/EditorMinimap';
-// import { MindContextMenu } from '../components/EditorContextMenu';
-// import { MindToolbar } from '../components/EditorToolbar';
-// import { MindDetailPanel } from '../components/EditorDetailPanel';
-// import data from '../mock/worldCup2018.json';
 import styles from '../NewActivities/index.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 //import { formatMessage } from 'umi-plugin-react/locale';
 GGEditor.setTrackable(false);
 
@@ -66,7 +62,7 @@ class chooseCommodity extends PureComponent {
         formValues: values,
       });
       this.props.dispatch({
-        type: 'orderListModel/getData',
+        type: 'NewActivitiesModel/getChooseCommodityData',
         payload: {
           ...values,
         },
@@ -100,33 +96,51 @@ class chooseCommodity extends PureComponent {
 
   //勾选
   Checklist = (e, record, index)=>{
+    // console.log('e',e.target.checked)
+    // console.log('record',record.goodsId)
+    // console.log('index',index)
+
     this.props.dispatch({
-      type: 'roleOperationDistribution/getChecklist',
+      type: 'NewActivitiesModel/getChoseGoods',
+      
       payload: {
-        id: this.props.roleOperationDistribution.selectProduct.tableData.item.id,
-        usercode:this.props.roleOperationDistribution.selectProduct.usercode,
-        ischoose:e.target.checked,
-        barcode:record.barcode
+        // id: this.props.roleOperationDistribution.selectProduct.tableData.item.id,
+        // usercode:this.props.roleOperationDistribution.selectProduct.usercode,
+        // ischoose:e.target.checked,
+        // barcode:record.barcode
+        goodsId:record.goodsId,
+        type:e.target.checked
       },
     });
   }
 
 
  //点击发货单
-  handleInvoice = () => {
-    this.props.dispatch({
-      type: 'roleOperationDistribution/getPaging',
-      payload: {
-        id: this.props.roleOperationDistribution.selectProduct.tableData.item.id,
-      },
-    });
-    //  this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
-    this.props.dispatch(routerRedux.push('/delivery/returnDeliveryForm' ));  
-  }
+  // handleInvoice = () => {
+  //   // this.props.dispatch({
+  //   //   type: 'roleOperationDistribution/getPaging',
+  //   //   payload: {
+  //   //     id: this.props.roleOperationDistribution.selectProduct.tableData.item.id,
+  //   //   },
+  //   // });
+  //   //  this.props.dispatch(routerRedux.push('/delivery/deliveryForm/' ));
+  //   this.props.dispatch(routerRedux.push('/delivery/returnDeliveryForm' ));  
+  // }
 
   
-
-
+  //确定
+  handleDetermine() {
+    this.props.dispatch(routerRedux.push('/activity/new'  ))
+  }
+  //取消
+  handleCancel (){
+    this.props.dispatch({
+      type: 'NewActivitiesModel/getChooseCancel',
+      payload: {
+        //state:"预到店"
+      },
+    });
+  }
 
 
   renderForm(){
@@ -137,21 +151,21 @@ class chooseCommodity extends PureComponent {
     return (
       <Form onSubmit={this.onSearch} layout="inline">
         <Row gutter={{ md: 12, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
+          {/* <Col md={8} sm={24}>
             <FormItem label="时间段：">
               {getFieldDecorator('date')(
                 <RangePicker style={{ width: '100%' }}  placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
-          </Col>
+          </Col> */}
           <Col md={8} sm={24}>
-            <FormItem label="订单号：">
-              {getFieldDecorator('orderCode')(
-                <Input style={{ width: '100%' }} placeholder="请输入订单号" />
+            <FormItem label="商品名：">
+              {getFieldDecorator('goodsName')(
+                <Input style={{ width: '100%' }} placeholder="请输入商品名" />
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          {/* <Col md={8} sm={24}>
             <FormItem label="订单状态：">
               {getFieldDecorator('state')(
                  <Select  placeholder="请选择">
@@ -160,7 +174,7 @@ class chooseCommodity extends PureComponent {
                 </Select>
               )}
             </FormItem>
-          </Col>
+          </Col> */}
           <Col md={8} sm={24}>
             <Button type="primary" htmlType="submit">查询</Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
@@ -217,33 +231,7 @@ class chooseCommodity extends PureComponent {
       showQuickJumper: true,
       ...pagination,
     };
-    // const columns = [
-    //   {
-    //     title: '序号',
-    //     dataIndex: 'key',
-    //     key: 'key',
-    //   },{
-    //     title: '状态',
-    //     dataIndex: 'state',
-    //     key: 'state',
-    //   } ,{
-    //     title: '时间段',
-    //     dataIndex: 'payTime',
-    //     key: 'payTime',
-    //   }
-    //   , {
-    //     title: '价格',
-    //     dataIndex: 'price',
-    //     key: 'price',
-    //   }
-    //   , {
-    //     title: '订单号',
-    //     dataIndex: 'orderCode',
-    //     key: 'orderCode',
-    //   }
-      
-    // ];
-
+    
     const columns = [
       {
         title: '选择',
@@ -267,7 +255,7 @@ class chooseCommodity extends PureComponent {
       dataIndex: 'key',
       key: 'key',
     }, {
-      title: '图',
+      title: '图片',
       dataIndex: 'png',
       key: 'png',
       render: (val,record) => (
@@ -282,9 +270,19 @@ class chooseCommodity extends PureComponent {
       key: 'goodsName',
 
     },{
-      title: '仓库',
-      dataIndex: 'warehouse',
-      key: 'warehouse',
+      title: '进货价',
+      dataIndex: 'goodsCost',
+      key: 'goodsCost',
+      render:val=>`¥${val}`
+    },{
+      title: '售价',
+      dataIndex: 'goodsPrice',
+      key: 'goodsPrice',
+      render:val=>`¥${val}`
+    },{
+      title: '库存',
+      dataIndex: 'goodsNum',
+      key: 'goodsNum',
     }
     ];
 
@@ -320,7 +318,11 @@ class chooseCommodity extends PureComponent {
                  onChange={this.handleTableChange}
                  // loading={submitting}
           /> */}
-
+          <div style={{marginBottom:'10px'}}>
+            <Button type="primary" style={{marginRight:'10px'}} onClick={this.handleDetermine.bind(this)}>确定</Button>
+            <Button  onClick={this.handleCancel.bind(this)}>取消</Button>
+          </div>
+          
           <Table dataSource={list}
             // scroll={{ x: 1500}}
             rowKey={record => record.key}

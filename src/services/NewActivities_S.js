@@ -26,3 +26,51 @@ export async function getChooseCommodityData(param) {
           },
   });
 }
+//选择商品勾选
+export async function getChoseGoods(param) {
+  return request(currency.GetApiUrl() + '/api/giftmanage/GiftManage/Active', {
+    method: 'POST',
+    data: {
+          token: currency.GetToken(),
+          method : "ChoseGoods", 
+          param,
+          },
+  });
+}
+
+
+//新增活动列表
+export async function getMakeSureGoodsList(param) {
+  return request(currency.GetApiUrl() + '/api/giftmanage/GiftManage/Active', {
+    method: 'POST',
+    data: {
+          token: currency.GetToken(),
+          method : "MakeSureGoodsList", 
+          param,
+          },
+  });
+}
+
+//改数
+export async function getChangeNum(param) {
+  return request(currency.GetApiUrl() + '/api/giftmanage/GiftManage/Active', {
+    method: 'POST',
+    data: {
+          token: currency.GetToken(),
+          method : "ChangeGoodsNum", 
+          param,
+          },
+  });
+}
+
+//取消
+export async function getChooseCancel(param) {
+  return request(currency.GetApiUrl() + '/api/giftmanage/GiftManage/Active', {
+    method: 'POST',
+    data: {
+          token: currency.GetToken(),
+          method : "DeleteActiveGoods", 
+          param,
+          },
+  });
+}
