@@ -12,11 +12,13 @@ export default {
 
   state: {
     status: undefined,
+    currentUser: {},
   },
 
   effects: {
     *login({ payload ,callback}, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
+     // console.log('xxx',response)
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -42,7 +44,8 @@ export default {
       //   yield put(routerRedux.replace(redirect || '/'));
       // }
       
-      if (response.data.isonload === true) {
+      // if (response.data.isonload === true) {
+      if (response.success === true) {  
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -62,7 +65,7 @@ export default {
         //callback(response)
         yield put(routerRedux.replace(redirect || '/'));
       } else {
-        message.error(response.data.msg);
+        message.error('用户名或密码错误');
       }
 
 
@@ -101,12 +104,14 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      if(payload.data.isonload == true){
+      // if(payload.data.isonload == true){
+      if(payload.success == true){  
         localStorage.setItem('acbc-token',JSON.stringify(payload.data))
       } else{
         localStorage.setItem('acbc-token','')
       }
-      setAuthority(payload.data.authority);
+      setAuthority(payload.data==null?'':payload.data.authority);
+      //setAuthority(payload.msg.msg);
       return {
         ...state,
         status: payload.status,

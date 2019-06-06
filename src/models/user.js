@@ -18,6 +18,8 @@ export default {
     },
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
+      // console.log('localStorage.getItem("acbc-token")',localStorage.getItem("acbc-token"))
+      // console.log('xxxxresponse',response)
       yield put({
         type: 'saveCurrentUser',
         payload: response,
@@ -33,9 +35,13 @@ export default {
       };
     },
     saveCurrentUser(state, action) {
+      const name = JSON.parse(localStorage.getItem("acbc-token"))
+      // console.log('xxxaction.payload',action.payload)
+      // console.log('name.getItem("acbc-token")',name )
       return {
         ...state,
-        currentUser: action.payload || {},
+       // currentUser: action.payload || {},
+      currentUser: name || {},
       };
     },
     changeNotifyCount(state, action) {

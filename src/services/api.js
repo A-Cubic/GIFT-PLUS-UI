@@ -1,9 +1,10 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
 import { setAuthority } from '@/utils/authority';
+import currency from '../utils/currency.js'
 
 //const b = 'http://192.168.0.128:53943';
-const b = 'http://192.168.191.1:53943';
+//const b = 'http://192.168.191.1:53943';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -107,46 +108,72 @@ export async function updateFakeList(params) {
   });
 }
 
+// export async function fakeAccountLogin(param) {
+//   return request(b+'/api/giftmanage/GiftManage/user', {
+//     method: 'POST',
+//     data: {
+//       param,
+//       method : "UserLogin", 
+//     },
+//   });
+// }
+
 export async function fakeAccountLogin(param) {
-  // return request('/api/login/account', {
-  //   method: 'POST',
-  //   data: params,
-  // });
-  return request(b+'/api/giftmanage/GiftManage/user', {
-    // method: 'POST',
-    // data: params,
+  //console.log('7777')
+  return request(currency.GetApiUrl() + '/api/GiftManage/GiftManage/user', {
     method: 'POST',
     data: {
-      param,
-     // method: 'post',
-     method : "UserLogin", 
-    },
+          //token: currency.GetToken(),
+          method : "UserLogin", 
+          param,
+          },
   });
 }
 
-export async function userLogout(param) {
-  const _token = localStorage.getItem("acbc-token")
+
+
+// export async function userLogout(param) {
+//   const _token = localStorage.getItem("acbc-token")
   
-  // return request('/api/login/account', {
-  //   method: 'POST',
-  //   data: params,
-  // });
-  return request(b+'/api/giftmanage/GiftManage/user', {
-    // method: 'POST',
-    // data: params,
+//   // return request('/api/login/account', {
+//   //   method: 'POST',
+//   //   data: params,
+//   // });
+//   return request(b+'/api/giftmanage/GiftManage/user', {
+//     // method: 'POST',
+//     // data: params,
+//     method: 'POST',
+//     data: {
+//       //param,
+//       token : JSON.parse(_token).token,
+//       param: {
+//         status: false,
+//         data: {authority: 'guest'}
+//       },
+//      // method: 'post',
+//      method : "UserLogout", 
+//     },
+//   });
+// }
+
+
+export async function userLogout(param) {
+  //console.log('7777')
+  return request(currency.GetApiUrl() + '/api/giftmanage/GiftManage/user', {
     method: 'POST',
     data: {
-      //param,
-      token : JSON.parse(_token).token,
-      param: {
-        status: false,
-        data: {authority: 'guest'}
-      },
-     // method: 'post',
-     method : "UserLogout", 
-    },
+          token: currency.GetToken(),
+          method : "UserLogout", 
+          param: {
+            status: false,
+            data: {authority: 'guest'}
+          },
+          },
   });
 }
+
+
+
 
 export async function fakeRegister(params) {
   return request('/api/register', {

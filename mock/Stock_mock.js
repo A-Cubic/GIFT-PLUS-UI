@@ -2,9 +2,9 @@ import moment from 'moment';
 import city from './geographic/city.json';
 import province from './geographic/province.json';
 import { message} from 'antd';
-const a = 'http://192.168.0.127:54195/';
+// const a = 'http://192.168.0.127:54195/';
 
-const b = 'http://192.168.0.128:54195/';
+// const b = 'http://192.168.0.128:54195/';
 
 // mock data
 const visitData = [];
