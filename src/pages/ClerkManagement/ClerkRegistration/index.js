@@ -68,8 +68,9 @@ class orderList extends PureComponent {
   };
 
   callbackType = (params) => {
-    console.log('callbackType',params.data.msg)
-    if(params.data.type == 1){
+    // console.log('callbackType',params.data.msg)
+    // console.log('params',params.success)
+    if(params.success == true){
       message.success('注册成功')
       this.handleFormReset()
       this.init()

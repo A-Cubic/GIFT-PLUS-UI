@@ -37,6 +37,7 @@ export default {
       const response = yield call(getData, payload);
      // console.log('xxxxx')
       if(response!==undefined){
+       // console.log('response.success',response.success)
         if(response.success ===true){
           if(response.msg.code == 4000){
             yield put(routerRedux.push('/user/login'));
