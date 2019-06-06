@@ -6,7 +6,7 @@ import GGEditor, { Mind } from 'gg-editor';
 //import { MindToolbar } from '../components/EditorToolbar';
 ///import { MindDetailPanel } from '../components/EditorDetailPanel';
 //import data from '../mock/worldCup2018.json';
-import styles from '../orderList/index.less';
+import styles from '../OrderList/index.less';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { connect } from 'dva';
@@ -27,7 +27,7 @@ const { TextArea } = Input;
 @Form.create()
 class MindPage extends PureComponent {
 
-  state = { 
+  state = {
     storeCode:'',
     state:'',
     formValues:{},
@@ -100,13 +100,13 @@ class MindPage extends PureComponent {
 
 
 
-  
+
 
 
   renderForm(){
   //const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    
+
     //console.log('xxx',this.props)
     return (
       <Form onSubmit={this.onSearch} layout="inline">
@@ -149,7 +149,7 @@ class MindPage extends PureComponent {
       </Form>
     );
   }
-  
+
 
   render() {
     const { orderListModel:{dataAll:{item,list,pagination}} } = this.props;
@@ -208,7 +208,7 @@ class MindPage extends PureComponent {
         dataIndex: 'orderCode',
         key: 'orderCode',
       }
-      
+
     ];
 
     return (
@@ -231,7 +231,7 @@ class MindPage extends PureComponent {
                  onChange={this.handleTableChange}
                  // loading={submitting}
           />
-          
+
         </Card>
       </PageHeaderWrapper>
     );
