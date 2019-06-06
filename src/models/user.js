@@ -17,12 +17,12 @@ export default {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      //const response = yield call(queryCurrent);
       // console.log('localStorage.getItem("acbc-token")',localStorage.getItem("acbc-token"))
       // console.log('xxxxresponse',response)
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        //payload: '',
       });
     },
   },
