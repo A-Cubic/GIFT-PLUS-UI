@@ -37,7 +37,7 @@ export default {
     saveCurrentUser(state, action) {
       const name = JSON.parse(localStorage.getItem("acbc-token"))
       // console.log('xxxaction.payload',action.payload)
-      // console.log('name.getItem("acbc-token")',name )
+       console.log('name.getItem("acbc-token")',name )
       return {
         ...state,
        // currentUser: action.payload || {},
