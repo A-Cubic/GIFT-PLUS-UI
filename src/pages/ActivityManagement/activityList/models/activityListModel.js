@@ -1,5 +1,5 @@
 import { queryRule, removeRule, addRule, updateRule } from '@/services/api';
-import { getData} from '@/services/activityList_S';
+import { getData ,getType} from '@/services/activityList_S';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 
@@ -11,7 +11,11 @@ export default {
     dataAll: {
       item:{},
       list: [],
-      pagination: {},
+      pagination: {
+        current: '1',
+        total: 1,
+        pageSize: 10
+      },
     },
   },
 
@@ -33,7 +37,40 @@ export default {
       }
     },
   
+    //点击状态 
+    *getType({ payload,callback },{ call,put }){
+      const response = yield call(getType, payload);
+     // console.log('xxxxx')
+      if(response!==undefined){
+       // console.log('response.success',response.success)
+        if(response.success ===true){
+          if(response.msg.code == 4000){
+            yield put(routerRedux.push('/user/login'));
+          } else {
+            
+           // message.success(response.msg.msg)
+           callback(response)
+            
+          }
+        } else {
+         
+          //message.error('商品id错误') 
+          if(response.msg.code == 8007) {
+            message.error('活动单号错误') 
+          }
+          if(response.msg.code == 8008) {
+            message.error('活动操作错误') 
+          }
+          if(response.msg.code == 8009) {
+            message.error('活动已结束，无法操作') 
+          }
+          
+          callback(response)
 
+        }
+        
+      }
+    },
     
 
 

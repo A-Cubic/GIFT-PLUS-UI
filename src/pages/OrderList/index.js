@@ -1,5 +1,5 @@
-import React, { PureComponent }  from 'react';
-import {Table ,Divider , message,Row, Col, Form,Input,DatePicker,Select,Button,Card,InputNumber, Radio,Icon,Tooltip} from 'antd';
+import React, { PureComponent ,Component}  from 'react';
+import {Modal ,Table ,Divider , message,Row, Col, Form,Input,DatePicker,Select,Button,Card,InputNumber, Radio,Icon,Tooltip} from 'antd';
 import GGEditor, { Mind } from 'gg-editor';
 //import EditorMinimap from '../components/EditorMinimap';
 //import { MindContextMenu } from '../components/EditorContextMenu';
@@ -33,6 +33,7 @@ class MindPage extends PureComponent {
     formValues:{},
     visible: false,
     visibleChildCheck:false,
+    code:''
   };
 
   componentDidMount() {
@@ -98,7 +99,21 @@ class MindPage extends PureComponent {
     });
   }
 
-
+  //点击详情
+  handleDetails (e, record) {
+    const { orderListModel:{dataAll} } = this.props;
+    //console.log(777,record.orderCode)
+    
+    this.setState({
+      code:record.orderCode
+    })
+    this.props.dispatch({
+      type: 'orderListModel/getOpen',
+      payload: {
+        orderCode:record.orderCode
+      }
+    });
+  }
 
 
 
@@ -106,6 +121,8 @@ class MindPage extends PureComponent {
   renderForm(){
   //const { roleOperationDistribution:{storesSales:{tableData:{item}}} } = this.props;
     const { getFieldDecorator } = this.props.form;
+
+   // console.log(888,this.state.code)
 
     //console.log('xxx',this.props)
     return (
@@ -202,12 +219,23 @@ class MindPage extends PureComponent {
         title: '价格',
         dataIndex: 'price',
         key: 'price',
+        render:val=>`¥${val}`
       }
       , {
         title: '订单号',
         dataIndex: 'orderCode',
         key: 'orderCode',
       }
+      , {
+        title: '详情',
+        dataIndex: 'details',
+        key: 'details',
+        render: (val,record) =>
+          <div>
+            {<a onClick={(e) => this.handleDetails(e, record)}>详情</a>}
+          </div>
+      }
+      
 
     ];
 
@@ -233,9 +261,128 @@ class MindPage extends PureComponent {
           />
 
         </Card>
+        <StoresSalesSee />
       </PageHeaderWrapper>
     );
   }
 }
+
+
+
+
+
+
+//弹窗
+@connect(({orderListModel}) => ({
+  orderListModel
+}))
+@Form.create()
+class StoresSalesSee  extends Component {
+  state={
+    isSocket:''
+  }
+
+  handleCancel = () => {
+    //this.props.form.resetFields();
+    //console.log('pp')
+    this.props.dispatch({
+      type:'orderListModel/getHandleR',
+    });
+    
+  }
+  handleOk = (e) => {
+    this.props.dispatch({
+      type:'orderListModel/getHandleR',
+    });
+    
+  }
+
+  handleTableChange=(pagination, filters, sorter)=>{
+    const { orderListModel:{orderListSee:{popup,list,item}} } = this.props;
+    const params = {
+      ...pagination,
+     // ...this.state.formValues,
+    };
+    this.props.dispatch({
+      type: 'orderListModel/getOpen',
+      payload: {
+        ...params,
+        orderCode:item
+      },
+    });
+  }
+ 
+  
+
+  render(){
+    const { orderListModel:{orderListSee:{popup,list,itme,pagination}} } = this.props;
+    //console.log('777',list)
+    const { getFieldDecorator } = this.props.form;
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...pagination,
+    };
+    const columns = [
+      {
+        title: '序号',
+        dataIndex: 'key',
+        key: 'key',
+      },{
+        title: '商品名',
+        dataIndex: 'goodsName',
+        key: 'goodsName',
+      } ,{
+        title: '数量',
+        dataIndex: 'num',
+        key: 'num',
+      }
+      , {
+        title: '供货价',
+        dataIndex: 'supplyPrice',
+        key: 'supplyPrice',
+        render:val=>`¥${val}`
+      }, {
+        title: '售价',
+        dataIndex: 'salePrice',
+        key: 'salePrice',
+        render:val=>`¥${val}`
+      }
+      , {
+        title: '状态',
+        dataIndex: 'state',
+        key: 'state',
+      }
+    ];
+
+
+    return(
+      <div>
+        <Modal
+          visible= {popup}
+          onCancel={this.handleCancel}
+          width={'75%'}
+          onOk={this.handleCancel}
+          style={{padding:'20px'}}
+        >
+
+          <Card bordered={false}>
+            <Table dataSource={list}
+                  // scroll={{ x: 1500}}
+                  rowKey={record => record.key}
+                  columns={columns}
+                  pagination={paginationProps}
+                  onChange={this.handleTableChange}
+                  // loading={submitting}
+            />
+          </Card>
+        </Modal>
+      </div>
+    )
+  }
+}
+
+
+
 
 export default MindPage;

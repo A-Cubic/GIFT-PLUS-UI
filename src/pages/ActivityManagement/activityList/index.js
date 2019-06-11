@@ -22,7 +22,7 @@ const FormItem = Form.Item;
   onValuesChange({ dispatch }, changedValues, allValues) {
     // 表单项变化时请求数据
     // eslint-disable-next-line
-    console.log(changedValues, allValues);
+   // console.log(changedValues, allValues);
     // 模拟查询表单生效
     dispatch({
       type: 'list/fetch',
@@ -51,6 +51,70 @@ class activityList extends PureComponent {
         
       },
     });
+  }
+
+  handleStart(e,item){
+    const { activityListModel:{dataAll:{pagination,list}} } = this.props;
+    
+    console.log('pagination',pagination)
+    this.props.dispatch({
+      type: 'activityListModel/getType',
+      payload: {
+        activeId:item.activeId,
+        operation:'开始',
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+        
+      },
+      callback: this.callbackType,
+    });
+   
+  }
+  
+
+  handleSuspend (e,item){
+    const { activityListModel:{dataAll:{pagination,list}} } = this.props;
+    this.props.dispatch({
+      type: 'activityListModel/getType',
+      payload: {
+        activeId:item.activeId,
+        operation:'暂停',
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+      },
+      callback: this.callbackType,
+    });
+  }  
+  handleStop (e,item){
+    const { activityListModel:{dataAll:{pagination,list}} } = this.props;
+    this.props.dispatch({
+      type: 'activityListModel/getType',
+      payload: {
+        activeId:item.activeId,
+        operation:'结束',
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+      },
+      callback: this.callbackType,
+    });
+  }  
+
+  callbackType = (params) => {
+    const { activityListModel:{dataAll:{pagination,list}} } = this.props;
+    if(params.success == true){
+     // message.success('注册成功')
+      
+     this.props.dispatch({
+      type: 'activityListModel/getData',
+      payload: {
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+      },
+    });
+      //console.log('ok')
+    } else {
+      message.error(params.data.msg);
+    }
   }
 
   render() {
@@ -154,29 +218,32 @@ class activityList extends PureComponent {
   
             },
             //pageSize:pagination.pageSize,
+            pageSize:pagination.pageSize,
             total: pagination.total,
             showSizeChanger: true,
             showQuickJumper: true,
           }}
 
-          renderItem={item => (
+          renderItem={(item ,index )=> (
             <List.Item key={item.id}>
               <Card
                 hoverable
                 bodyStyle={{ paddingBottom: 20 }}
                 actions={[
-                  <Tooltip title="开始">
-                    <Icon type="play-circle" theme="twoTone" twoToneColor="red" />
+                  <Tooltip title="开始" onClick={(e) => this.handleStart(e, item,index)}>
+                    {item.activeType==1?<Icon type="play-circle" theme="twoTone" twoToneColor="red" />:<Icon type="play-circle" theme="twoTone"  />}
                   </Tooltip>,
-                  <Tooltip title="暂停">
-                    <Icon type="pause-circle" theme="twoTone"  />
+                  <Tooltip title="暂停" onClick={(e) => this.handleSuspend(e, item,index)}>
+                    {item.activeType==0?<Icon type="pause-circle" theme="twoTone" twoToneColor="red" />:<Icon type="pause-circle" theme="twoTone"  />}
+                    {/* <Icon type="pause-circle" theme="twoTone"  /> */}
                   </Tooltip>,
-                  <Tooltip title="停止">
-                    <Icon type="stop" theme="twoTone"  />
+                  <Tooltip title="结束" onClick={(e) => this.handleStop(e, item,index)}>
+                    {item.activeType==-1?<Icon type="stop" theme="twoTone" twoToneColor="red" />:<Icon type="stop" theme="twoTone"  />}
+                    {/* <Icon type="stop" theme="twoTone"  /> */}
                   </Tooltip>,
-                  <Dropdown overlay={itemMenu}>
-                    <Icon type="ellipsis" />
-                  </Dropdown>,
+                  // <Dropdown overlay={itemMenu}>
+                  //   <Icon type="ellipsis" />
+                  // </Dropdown>,
                 ]}
               >
                 {/* <Card.Meta avatar={<Avatar size="small" src={item.img[0]} />} title={item.title} /> */}

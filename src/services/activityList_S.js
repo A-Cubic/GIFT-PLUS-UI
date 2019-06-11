@@ -12,5 +12,15 @@ export async function getData(param) {
           },
   });
 }
-
+//点击状态
+export async function getType(param) {
+  return request(currency.GetApiUrl() + '/api/giftmanage/GiftManage/Active', {
+    method: 'POST',
+    data: {
+          token: currency.GetToken(),
+          method : "ChangeActive", 
+          param,
+          },
+  });
+}
 

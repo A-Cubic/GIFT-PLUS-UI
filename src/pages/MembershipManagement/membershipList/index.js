@@ -84,7 +84,7 @@ class membershipList extends PureComponent {
     this.init();
   }
   handleTableChange=(pagination, filters, sorter)=>{
-    console.log('pagination',pagination)
+   // console.log('pagination',pagination)
     const params = {
       ...pagination,
       ...this.state.formValues,

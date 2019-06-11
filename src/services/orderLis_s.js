@@ -14,4 +14,14 @@ export async function getData(param) {
   });
 }
 
+export async function getOpen(param) {
+  return request(currency.GetApiUrl() + '/api/giftmanage/GiftManage/Order', {
+    method: 'POST',
+    data: {
+          token: currency.GetToken(),
+          method : "OrderDetails", 
+          param,
+          },
+  });
+}
 
