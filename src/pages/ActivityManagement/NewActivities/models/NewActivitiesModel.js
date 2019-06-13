@@ -132,8 +132,12 @@ export default {
           if(response.msg.code == 8006) {
             message.error('状态错误') 
           }
-          
-
+          if(response.msg.code == 8010) {
+            message.error('心值不是整数') 
+          }
+          if(response.msg.code == 8011) {
+            message.error('上限不是整数') 
+          }
         }
         
       }
