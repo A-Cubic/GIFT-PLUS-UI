@@ -12,6 +12,7 @@ import {
   getChooseCancel, //取消
   getHandleOkR, //打开弹窗
   getHandleCR,//关闭
+  getNumR, // 传activeType值
 } from '@/services/NewActivities_S';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
@@ -301,6 +302,31 @@ export default {
         }
       }
     },
+    
+
+    getNumR(state, action){
+    //  console.log('xxxstate',state.inputVal.item)
+    //  console.log('xxxaction',action.payload.num)
+        return {
+          ...state,
+          inputVal: {
+            item:{
+              date:state.inputVal.item.date,
+              activeRemark:state.inputVal.item.activeRemark,
+              activeTime:state.inputVal.item.activeTime,
+              activeType:action.payload.num,
+              consume:state.inputVal.itemconsume,
+              heartItemValue:state.inputVal.item.heartItemValue,
+              limitItemValue:state.inputVal.itemlimitItemValue,
+            },
+            
+          }
+        }
+      },
+
+
+
+
 
     getDelR(state, action){
       //console.log('xxxxxxxaa',action)

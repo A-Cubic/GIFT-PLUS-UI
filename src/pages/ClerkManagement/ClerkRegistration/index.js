@@ -125,8 +125,8 @@ class orderList extends PureComponent {
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
             <FormItem {...formItemLayout} label='验证码'>
               {getFieldDecorator('storeCode', {
-                rules: [{ required: true, message: '请输入手机验证码' }],
-              })(<Input placeholder="请输入手机验证码"/>)}
+                rules: [{ required: true, message: '请输入四位手机验证码' }],
+              })(<Input placeholder="请输入四位手机验证码"/>)}
             </FormItem>
             <FormItem {...formItemLayout} label='可注册数量'>
               {getFieldDecorator('state', {

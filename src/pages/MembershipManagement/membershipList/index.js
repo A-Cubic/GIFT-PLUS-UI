@@ -135,6 +135,7 @@ class membershipList extends PureComponent {
                  <Select  placeholder="请选择性别">
                   <Option value="男">男</Option>
                   <Option value="女">女</Option>
+                  <Option value="未知">未知</Option>
                 </Select>
               )}
             </FormItem>

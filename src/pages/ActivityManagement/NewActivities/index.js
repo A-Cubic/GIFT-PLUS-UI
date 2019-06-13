@@ -133,17 +133,27 @@ class orderList extends PureComponent {
 
   toggle = e => {
    // console.log('radio checked', e.target.value);
-    if(e.target.value == 0){
-      this.setState({
-        value: e.target.value,
-        disabled: false,
-      });
-    } else {
-      this.setState({
-        value: e.target.value,
-        disabled: true,
-      });
-    }
+   const { NewActivitiesModel:{inputVal:{item:{activeType}}} } = this.props;
+   //console.log('eee',e.target.value)
+
+    // if(e.target.value == 0){
+    // if(activeType == 0){
+    //   this.setState({
+    //     //value: e.target.value,
+    //     disabled: false,
+    //   });
+    // } else {
+    //   this.setState({
+    //    // value: e.target.value,
+    //     disabled: true,
+    //   });
+    // }
+    this.props.dispatch({
+      type: 'NewActivitiesModel/getNumR',
+      payload: {
+        num:e.target.value
+      },
+    });
     
   };
 
@@ -377,7 +387,7 @@ class orderList extends PureComponent {
     const { NewActivitiesModel:{inputVal:{item},dataAll:{list,pagination}} } = this.props;
     const { NewActivitiesModel:{see:{popup}} } = this.props;
     //const { NewActivitiesModel:{dataAll:{popup} }} = this.props;
-    //console.log('777',popup)
+   // console.log('777',item)
    // console.log('item',this.props)
 
     const RadioGroup = Radio.Group;
@@ -541,7 +551,8 @@ class orderList extends PureComponent {
             <FormItem {...formItemLayout} label='金额'>
               {getFieldDecorator('consume', {
                 initialValue: item==null?'':item.consume
-              })( <Input placeholder="请输入金额" style={{width:'75%',marginRight:'6px'}} disabled={this.state.disabled}  />)}
+              // })( <Input placeholder="请输入金额" style={{width:'75%',marginRight:'6px'}} disabled={this.state.disabled}  />)}
+            })( <Input placeholder="请输入金额" style={{width:'75%',marginRight:'6px'}} disabled={item.activeType==0?false:true}  />)}
               <span>元</span>
             </FormItem>  
             <FormItem {...formItemLayout} label='奖励心值'>
