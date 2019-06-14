@@ -59,7 +59,9 @@ export default {
           if(response.msg.code == 6002) {
             message.error('错误注册数量') 
           }
-          
+          if(response.msg.code == 500) {
+            message.error('数据有误，请联系客服') 
+          }
           callback(response)
 
         }

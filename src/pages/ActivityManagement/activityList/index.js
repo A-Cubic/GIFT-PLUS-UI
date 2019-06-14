@@ -56,7 +56,7 @@ class activityList extends PureComponent {
   handleStart(e,item){
     const { activityListModel:{dataAll:{pagination,list}} } = this.props;
     
-    console.log('pagination',pagination)
+   // console.log('pagination',pagination)
     this.props.dispatch({
       type: 'activityListModel/getType',
       payload: {
@@ -119,7 +119,7 @@ class activityList extends PureComponent {
 
   render() {
     const { activityListModel:{dataAll:{item,pagination,list}} } = this.props;
-    //console.log(777,list)
+   // console.log(777,pagination)
     // const {
     //   list: { list },
     //   loading,
@@ -218,6 +218,7 @@ class activityList extends PureComponent {
   
             },
             //pageSize:pagination.pageSize,
+            pageSizeOptions:['12', '24', '36', '48'],
             pageSize:pagination.pageSize,
             total: pagination.total,
             showSizeChanger: true,

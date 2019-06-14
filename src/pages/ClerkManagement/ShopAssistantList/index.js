@@ -41,27 +41,10 @@ class FlowPage extends PureComponent {
       },
     });
   }
-  // handleDel(item,index) {
-  //   console.log('index',item)
-  //   this.props.dispatch({
-  //     type: 'ShopAssistantListModel/getDel',
-  //     payload: {
-  //       userCode:item.userCode
-  //     },
-  //     callback: this.callbackType,
-  //   });
-  // }
-
-  // callbackType = (params) => {
-  //   console.log('1111callbackType',params.data.item.type)
-  //   if(params.data.item.type == 1){
-  //     this.init()
-  //     console.log('ok')
-  //   }
-  // }  
-
+  
   render() {
     const {ShopAssistantListModel:{dataAll:{item,pagination,list}}} = this.props;
+    //console.log(888,pagination)
     // const {
     //   list: { list },
     //   loading,
@@ -91,10 +74,9 @@ class FlowPage extends PureComponent {
             rowKey="id"
            // loading={loading}
             grid={{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
-            dataSource={['', ...list]}
+            dataSource={list}
             pagination={{
-                
-
+      
               onChange: (page) => {
                 this.props.dispatch({
                   type: 'ShopAssistantListModel/getData',
@@ -116,12 +98,12 @@ class FlowPage extends PureComponent {
                   },
                 });
 
-    
               },
-             // pageSize:pagination.pageSize,
+              pageSize:pagination.pageSize,
               total: pagination.total,
               showSizeChanger: true,
               showQuickJumper: true,
+              pageSizeOptions:['9', '18', '27', '36']
             }}
             renderItem={(item ,index)=>
               item ? (

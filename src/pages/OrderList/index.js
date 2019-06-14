@@ -362,8 +362,12 @@ class StoresSalesSee  extends Component {
           visible= {popup}
           onCancel={this.handleCancel}
           width={'75%'}
-          onOk={this.handleCancel}
+          //onOk={this.handleCancel}
           style={{padding:'20px'}}
+          footer={[
+            <Button key="1" type="primary" onClick={this.handleCancel}>关闭</Button>,
+            // <Button key="2" type="primary" onClick={this.handleOk}>确定</Button>
+          ]}
         >
 
           <Card bordered={false}>

@@ -11,7 +11,11 @@ export default {
     dataAll: {
       item:{},
       list: [],
-      pagination: {},
+      pagination: {
+        current: '1',
+        total: 1,
+        pageSize: 9
+      },
     },
   },
 

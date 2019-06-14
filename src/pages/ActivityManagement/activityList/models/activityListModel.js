@@ -14,7 +14,7 @@ export default {
       pagination: {
         current: '1',
         total: 1,
-        pageSize: 10
+        pageSize: 12
       },
     },
   },
@@ -63,6 +63,9 @@ export default {
           }
           if(response.msg.code == 8009) {
             message.error('活动已结束，无法操作') 
+          }
+          if(response.msg.code == 500) {
+            message.error('数据有误，请联系客服') 
           }
           
           callback(response)
