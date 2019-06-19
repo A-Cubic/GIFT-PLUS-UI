@@ -63,7 +63,7 @@ export default {
           }
         }
         //callback(response)
-        yield put(routerRedux.replace(redirect || '/'));
+        yield put(routerRedux.replace(redirect || '/gift'));
       } else {
         message.error('用户名或密码错误');
       }
